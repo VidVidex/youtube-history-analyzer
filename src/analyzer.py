@@ -1,7 +1,8 @@
+import argparse
 import importlib
 import json
-import os
-from dateutil import parser
+
+from dateutil import parser as date_parser
 
 
 class Analyzer:
@@ -9,6 +10,8 @@ class Analyzer:
     watch_history = []
     extractors = []
     extractor_names = []
+
+    available_extractors = ['MostRecent', 'MostWatched']
 
     def __init__(self, path: str, extractor_names=None):
 
@@ -32,7 +35,7 @@ class Analyzer:
                         'url': video["titleUrl"],
                         'channel_name': video["subtitles"][0]['name'],
                         'channel_url': video["subtitles"][0]['url'],
-                        'time': parser.parse(video['time'])
+                        'time': date_parser.parse(video['time'])
                     })
 
         self._init_extractors()
@@ -53,3 +56,16 @@ class Analyzer:
         for extractor in self.extractors:
             extractor.format()
             print('')
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Analyze YouTube watch history.')
+    parser.add_argument('-p', '--path', help='path to watch-history.json (default=watch-history.json)', default='watch-history.json')
+    parser.add_argument('-e', '--extractors', nargs='+', help='select extractors', choices=Analyzer.available_extractors)
+
+    args = parser.parse_args()
+
+    analyzer = Analyzer(args.path, extractor_names=args.extractors)
+    analyzer.import_history_json()
+
+    analyzer.print_results()
