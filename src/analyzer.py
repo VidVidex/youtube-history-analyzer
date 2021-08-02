@@ -11,7 +11,7 @@ class Analyzer:
     extractors = []
     extractor_names = []
 
-    available_extractors = ['MostRecent', 'MostWatched']
+    available_extractors = ['MostRecent', 'MostWatched', 'TotalViews']
 
     def __init__(self, path: str, extractor_names=None):
 

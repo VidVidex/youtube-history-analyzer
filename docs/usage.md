@@ -38,3 +38,7 @@ Prints the most recently watched video
 #### MostWatched
 
 Prints the most watched video and how many times you've watched it
+
+#### TotalCount
+
+Prints the number of videos watched 

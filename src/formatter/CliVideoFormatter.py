@@ -8,7 +8,8 @@ class CliVideoFormatter(Formatter):
     def format(self, data: dict):
         print(data['heading'])
 
-        self.print_video(data['videos'][0]['video'])
+        if data['videos'][0]['video'] is not None:
+            self.print_video(data['videos'][0]['video'])
 
         for note in data['videos'][0]['notes']:
             print(' ' * 5, end='')
