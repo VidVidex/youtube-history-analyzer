@@ -27,7 +27,21 @@ class Analyzer:
         self.connection = sqlite3.connect(':memory:')
         self.cursor = self.connection.cursor()
 
+        # https://stackoverflow.com/a/3300514
+        self.connection.row_factory = self._dict_factory
+
         self._init_db()
+
+    @staticmethod
+    def _dict_factory(cursor, row):
+        d = {}
+        for idx, col in enumerate(cursor.description):
+
+            if col[0] == 'time':
+                d[col[0]] = date_parser.parse(row[idx])
+            else:
+                d[col[0]] = row[idx]
+        return d
 
     def _init_db(self):
         self.cursor.execute('''create table watch_history

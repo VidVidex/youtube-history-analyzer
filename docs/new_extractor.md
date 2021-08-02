@@ -47,7 +47,7 @@ Since `SomethingExtractor` extends `Extractor` it has access the the `self.watch
 ]
 ```
 
-While python dicts are nice and all, sometimes you need more powerful queries. That is why you also have access to a SQLite connection `self.connection`. The database contains a single table with the following structure:
+Python dicts are nice and all, but sometimes you need more powerful queries. That is why you also have access to a SQLite connection `self.connection`. The database contains a single table with the following structure:
 ```sql
 create table watch_history
 (
@@ -59,6 +59,8 @@ create table watch_history
     time         datetime      not null
 );
 ```
+
+SQL queries return dicts or lists of dicts with the same structure as above.
 
 
 ## Formatter
