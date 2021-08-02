@@ -1,6 +1,8 @@
 import argparse
 import importlib
 import json
+import sqlite3
+from sqlite3 import Connection, Cursor
 
 from dateutil import parser as date_parser
 
@@ -10,6 +12,8 @@ class Analyzer:
     watch_history = []
     extractors = []
     extractor_names = []
+    connection: Connection
+    cursor: Cursor
 
     available_extractors = ['MostRecent', 'MostWatched', 'TotalViews']
 
@@ -20,6 +24,21 @@ class Analyzer:
 
         self.path = path
         self.extractor_names = extractor_names
+        self.connection = sqlite3.connect(':memory:')
+        self.cursor = self.connection.cursor()
+
+        self._init_db()
+
+    def _init_db(self):
+        self.cursor.execute('''create table watch_history
+                                (
+                                    id           char(11)      not null,
+                                    title        varchar(2048) not null,
+                                    url          varchar(128)  not null,
+                                    channel_name varchar(128)  not null,
+                                    channel_url  varchar(128)  not null,
+                                    time         datetime      not null
+                                );''')
 
     def import_history_json(self) -> None:
         self.watch_history = []
@@ -38,6 +57,9 @@ class Analyzer:
                         'time': date_parser.parse(video['time'])
                     })
 
+        self.cursor.executemany("INSERT INTO watch_history VALUES(:id, :title, :url, :channel_name, :channel_url, :time)", self.watch_history)
+        self.connection.commit()
+
         self._init_extractors()
 
     def _init_extractors(self) -> None:
@@ -47,7 +69,7 @@ class Analyzer:
             class_name = f'{extractor_name}Extractor'
             module = importlib.import_module(f'extractor.{class_name}')
 
-            extractor = getattr(module, class_name)(self.watch_history)
+            extractor = getattr(module, class_name)(self.watch_history, self.connection)
 
             self.extractors.append(extractor)
 

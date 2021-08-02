@@ -25,7 +25,7 @@ class SomethingExtractor(Extractor):
         }
 ```
 
-Since `SomethingExtractor` extends `Extractor` it has access the the `watch_history` property, which is a list of dicts, each containing a watched video:
+Since `SomethingExtractor` extends `Extractor` it has access the the `self.watch_history` property, which is a list of dicts, each containing a watched video:
 
 ```python
 [
@@ -45,6 +45,19 @@ Since `SomethingExtractor` extends `Extractor` it has access the the `watch_hist
         'channel_url': 'https://www.youtube.com/channel/UChyNJxSsIXh2KyY3VvLnI2g', 'time': datetime.datetime(2021, 7, 17, 11, 32, 23, 654000, tzinfo=tzutc())
     }
 ]
+```
+
+While python dicts are nice and all, sometimes you need more powerful queries. That is why you also have access to a SQLite connection `self.connection`. The database contains a single table with the following structure:
+```sql
+create table watch_history
+(
+    id           char(11)      not null,
+    title        varchar(2048) not null,
+    url          varchar(128)  not null,
+    channel_name varchar(128)  not null,
+    channel_url  varchar(128)  not null,
+    time         datetime      not null
+);
 ```
 
 
