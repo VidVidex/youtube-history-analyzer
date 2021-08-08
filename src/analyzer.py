@@ -15,7 +15,7 @@ class Analyzer:
     connection: Connection
     cursor: Cursor
 
-    available_extractors = ['MostRecent', 'MostWatched', 'TotalVideosWatched']
+    available_extractors = ['MostRecent', 'MostWatched', 'TotalVideosWatched', 'FavouriteChannel']
 
     def __init__(self, path: str, extractor_names=None):
 
@@ -24,7 +24,8 @@ class Analyzer:
 
         self.path = path
         self.extractor_names = extractor_names
-        self.connection = sqlite3.connect(':memory:')
+        self.connection = sqlite3.connect('db.sqlite')
+        # self.connection = sqlite3.connect(':memory:')
         self.cursor = self.connection.cursor()
 
         # https://stackoverflow.com/a/3300514
@@ -44,7 +45,7 @@ class Analyzer:
         return d
 
     def _init_db(self):
-        self.cursor.execute('''create table watch_history
+        self.cursor.execute('''create table if not exists watch_history 
                                 (
                                     id           char(11)      not null,
                                     title        varchar(2048) not null,
@@ -53,6 +54,9 @@ class Analyzer:
                                     channel_url  varchar(128)  not null,
                                     time         datetime      not null
                                 );''')
+        self.cursor.execute('delete from watch_history;')
+        self.connection.commit()
+        self.cursor.execute('vacuum')
 
     def import_history_json(self) -> None:
         self.watch_history = []

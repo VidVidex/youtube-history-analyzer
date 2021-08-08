@@ -41,4 +41,8 @@ Prints the most watched video and how many times you've watched it
 
 #### TotalVideosWatched
 
-Prints the number of videos watched 
+Prints the number of videos watched
+
+#### FavouriteChannel
+
+Prints the channel with the most videos watched 
