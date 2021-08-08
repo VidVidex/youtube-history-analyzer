@@ -2,7 +2,7 @@ from extractor.Extractor import Extractor
 from formatter.CliVideoFormatter import CliVideoFormatter
 
 
-class TotalViewsExtractor(Extractor):
+class TotalVideosWatchedExtractor(Extractor):
     formatter = CliVideoFormatter()
 
     def extract(self):
