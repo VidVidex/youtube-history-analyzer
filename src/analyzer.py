@@ -15,7 +15,7 @@ class Analyzer:
     connection: Connection
     cursor: Cursor
 
-    available_extractors = ['MostRecent', 'MostWatched', 'TotalVideosWatched', 'FavouriteChannel']
+    available_extractors = ['MostRecent', 'MostWatched', 'TotalVideosWatched', 'FavouriteChannel', 'RickrollCount']
 
     def __init__(self, path: str, extractor_names=None):
 

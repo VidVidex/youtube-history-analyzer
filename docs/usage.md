@@ -46,3 +46,7 @@ Prints the number of videos watched
 #### FavouriteChannel
 
 Prints the channel with the most videos watched 
+
+#### RickrollCount
+
+Prints the number of times you've been rickrolled
